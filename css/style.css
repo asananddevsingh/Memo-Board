@@ -1,0 +1,142 @@
+body {
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    color: #383838;
+}
+
+.board {
+    background-color: cornflowerblue;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+.memoContainer {
+    text-align: center;
+    width: 150px;
+    height: 150px;
+    background-color: #fff;
+    margin: 10px;
+    float: left;
+    position: relative;
+}
+
+.addMemo {
+    font-size: 35px;
+    font-weight: bold;
+    color: white;
+    margin: 10px;
+    cursor: pointer;
+    background: black;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.saveMemo {
+    text-align: left;
+    background-color: #fff;
+    margin: 10px;
+    height: 150px;
+    width: 425px;
+}
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+button {
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    margin: 2px;
+}
+
+.button-primary {
+    background-color: darkblue;
+}
+
+.button-success {
+    background-color: green;
+}
+
+.button-danger {
+    background-color: red;
+}
+
+.idea-title {
+    width: 400px;
+    margin: 10px;
+    height: 20px;
+}
+
+.idea-body {
+    width: 400px;
+    margin: 0px 10px;
+    height: 55px;
+}
+
+.btn-add-idea {
+    text-align: right;
+    margin-right: 10px;
+}
+
+.tile {
+    margin: 5px;
+    text-align: left;
+}
+
+.tile.tile-title {
+    font-weight: bold;
+}
+
+.deleteMemo {
+    background-image: url('/images/remove-icon.png');
+    float: right;
+    height: 15px;
+    width: 15px;
+    margin: 4px;
+    background-repeat: no-repeat;
+}
+
+
+/*.tile-title:hover::after {
+    content: url('/images/remove-icon.png');
+    float: right;
+}*/
+
+.editTitle {
+    width: 134px;
+    height: 20px;
+    margin: 4px;
+}
+
+.editBody {
+    width: 134px;
+    height: 65px;
+}
+
+.editTitle:focus,
+.editBody:focus {
+    border: 2px solid lightgrey;
+}
+
+.textarea:hover,
+textarea:focus {
+    outline: 0px !important;
+    -webkit-appearance: none;
+}
+
+
+/*.tile.tile-title:hover{
+    border: 1px solid #000;
+}*/
+
+.tile .tile-body {}
