@@ -2,13 +2,18 @@ body {
     font-size: 12px;
     font-family: Arial, sans-serif;
     color: #383838;
+
 }
 
 .board {
-    background-color: cornflowerblue;
+        background-color: #fffff2;
     height: 100%;
-    width: 100%;
+    width: 860px;
     position: fixed;
+    display: inline-block;
+    margin: 0px 25%;
+    border: 1px solid lightblue;
+        border-radius: 5px;
 }
 
 .memoContainer {
@@ -19,6 +24,8 @@ body {
     margin: 10px;
     float: left;
     position: relative;
+        border-radius: 5px;
+    border: 1px solid lightblue;
 }
 
 .addMemo {
@@ -27,18 +34,21 @@ body {
     color: white;
     margin: 10px;
     cursor: pointer;
-    background: black;
-    width: 40px;
-    height: 40px;
+    background: green;
+    width: 30px;
+    height: 30px;
     text-align: center;
+    line-height: 30px;
 }
 
 .saveMemo {
     text-align: left;
-    background-color: #fff;
+    background-color: #fffdbc;
     margin: 10px;
     height: 150px;
     width: 425px;
+        border: 1px solid lightblue;
+        border-radius: 5px;
 }
 
 .visuallyhidden {
@@ -60,7 +70,7 @@ button {
 }
 
 .button-primary {
-    background-color: darkblue;
+    background-color: #0084af;
     width: 75px;
     height: 25px;
     line-height: 12px;
@@ -151,4 +161,72 @@ textarea:focus {
     margin: 10px;
     font-weight: bold;
     color: black;
+}
+
+.heading{
+        text-align: center;
+    font-size: 40px;
+    color: black;
+    background-color: #fff57b;
+        border-radius: 5px;
+}
+
+select {
+    padding:6px;
+    margin: 5px;
+    height: 25px;
+    width: 100px;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+    -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+    box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+    background: #f8f8f8;
+    color:#888;
+    border:none;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}
+
+label {position:relative}
+label:after {
+    content:'<>';
+    font:11px "Consolas", monospace;
+    color:#aaa;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform:rotate(90deg);
+    right:8px; top:2px;
+    padding:0 0 2px;
+    border-bottom:1px solid #ddd;
+    position:absolute;
+    pointer-events:none;
+}
+label:before {
+    content:'';
+    right:6px; top:0px;
+    width:20px; height:20px;
+    background:#f8f8f8;
+    position:absolute;
+    pointer-events:none;
+    display:block;
+}
+
+.msg-success{
+    height: 40px;
+    width: 98%;
+    background: #daffda;
+    border: 1px solid green;
+    font-size: 15px;
+    margin: 8px;
+    text-align: left;
+    line-height: 38px;
+    text-indent: 6px;
+    border-radius: 5px;
 }

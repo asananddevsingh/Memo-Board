@@ -11,10 +11,10 @@
 <body>
     <div id="memoBoard"></div>
 
-    /*
-        Writing the script at the same page because might be possibel some machine will not supoort JSX files. However here I've referenced to 'browser.min.js' to support JSX.
-        We can move the components in the separate files.
-    */
+
+        <!-- Writing the script at the same page because might be possibel some machine will not supoort JSX files. However here I've referenced to 'browser.min.js' to support JSX.
+        We can move the components in the separate files. -->
+
     <script type="text/babel">
 
         var Memo = React.createClass({
@@ -35,7 +35,7 @@
             renderText: function(){
                 return (
                      <div className="memoContainer" ref="deleteMemo"  onMouseEnter={this.showBin} onMouseLeave={this.hideBin}>
-                        <span className={ this.state.deleting ? "deleteMemo" : "visuallyhidden"} onClick={this.remove}  ref="deleteMemo"></span>
+                        <span className={ this.state.deleting ? "deleteMemo" : "visuallyhidden"} onClick={this.remove}  ref="deleteMemo" title="Delete memo"></span>
                          <div>{this.props.children}</div>
                          <button onClick={this.edit} className="button-primary">Edit</button>
                      </div>
@@ -116,7 +116,8 @@
                     maxAllowedChars: 140,
                     leftChars: 140,
                     thresholdCharCount: 15,
-                    sortingValue : "select"
+                    sortingValue : "select",
+                    showAlert: false,
                 };
             },
             addMemo: function(){
@@ -128,11 +129,17 @@
                     ideas.push(this.getIdAndCreatedDate());
                     this.setState({ideas: ideas});
                     this.refs.addMemoTitle.value = this.refs.addMemoBody.value = '';
-                    this.setState({editingBody: false, leftChars: this.state.maxAllowedChars});
+                    this.setState({editingBody: false, leftChars: this.state.maxAllowedChars, showAlert: true});
+                    this.hideAlert(this);
                 }
                 else{
                     alert('Please enter some values.')
                 }
+            },
+            hideAlert: function(context){
+                    setTimeout(function(){
+                        context.setState({showAlert: false});
+                    }, 4000)
             },
             getIdAndCreatedDate: function(){
                 /*
@@ -166,7 +173,8 @@
                 memoItems.title = newMemoTitle.trim();
                 memoItems.body = newMemoBody.trim();
                 arr[i] = memoItems;
-                this.setState({ideas: arr});
+                this.setState({ideas: arr, showAlert: true});
+                this.hideAlert(this);
             },
             toggleMemoForm: function(){
                this.setState({showMemoForm: !this.state.showMemoForm});
@@ -187,6 +195,8 @@
             render: function(){
                 return (
                     <div className="board">
+                    <div id="heading" className="heading">Memo Board</div>
+                    <div id="alertMsg" className={this.state.showAlert ? "msg-success" : "visuallyhidden"}>Your message have been successfully saved.</div>
                     <div className="addMemo" onClick={this.toggleMemoForm}
                        title={this.state.showMemoForm ? "Colapse the form" : "Add new Idea/Memo" }>
                         {this.state.showMemoForm ? "-" : "+"}
@@ -206,11 +216,14 @@
                         </div>
                      </div>
                      <div className="sort">
-                        Sort by: <select onChange={this.sorting} value={this.state.sortingValue}>
+                        Sort by:
+                        <label>
+                            <select onChange={this.sorting} value={this.state.sortingValue}>
                                       <option value="select">Select</option>
                                       <option value="title">Title</option>
                                       <option value="createdate">Created date</option>
                                    </select>
+                        </label>
                     </div>
                          { this.state.ideas.map(this.renderMemo) }
                     </div>
@@ -269,8 +282,8 @@
 </body>
 </html>
 
-/*
+<!-- /*
     Author  : Anand Dev Singh | ananddev.singh@globallogic.com.
     Date    : 23/Aug/2016
     Company : GlobalLogic Noida - India.
-*/
+*/ -->
