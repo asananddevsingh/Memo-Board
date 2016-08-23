@@ -6,7 +6,7 @@
     <script src="./libs/react.js"></script>
     <script src="./libs/react-dom.js"></script>
     <script src="./libs/browser.min.js"></script>
-    <link href="./css/style.min.css" rel="stylesheet" >
+    <link href="./css/style.css" rel="stylesheet" >
 </head>
 <body>
     <div id="memoBoard"></div>
@@ -97,20 +97,7 @@
             */
             getInitialState: function(){
                 return {
-                    ideas: [
-                        { id: 7210810, created_date: "2016/08/22", title: "React"
-                         , body: "React is a JavaScript library for creating user interfaces by Facebook and Instagram. Many people choose to think of React as the V in MVC.."
-                        },
-                        { id: 7210811, created_date: "2016/08/23", title: "Node JS"
-                         , body: "In software dev, Node.js is an open source, cross platform runtime environment for developing server-side applications."
-                        },
-                        { id: 7210900, created_date: "2015/04/14", title: "Angular"
-                         , body: "AngularJS is a very powerful JavaScript Framework, AngularJS extends HTML attributes with Directives, and binds data to HTML."
-                        },
-                        { id: 7211010, created_date: "2014/10/15", title: "JavaScript"
-                         , body: "JavaScript is the programming language of HTML and the Web. Programming makes computers do what you want them to do."
-                        }
-                    ],
+                    ideas: this.getInitialData(),
                     showMemoForm: false,
                     editingBody: false,
                     maxAllowedChars: 140,
@@ -120,6 +107,28 @@
                     showAlert: false,
                 };
             },
+            getInitialData: function(){
+
+                if (localStorage.getItem('ideas')) {
+                    return JSON.parse(localStorage.getItem('ideas'));
+                }
+                else{
+                    return [
+                            { id: 7210810, created_date: "2016/08/22", title: "React"
+                             , body: "React is a JavaScript library for creating user interfaces by Facebook and Instagram. Many people choose to think of React as the V in MVC.."
+                            },
+                            { id: 7210811, created_date: "2016/08/23", title: "Node JS"
+                             , body: "In software dev, Node.js is an open source, cross platform runtime environment for developing server-side applications."
+                            },
+                            { id: 7210900, created_date: "2015/04/14", title: "Angular"
+                             , body: "AngularJS is a very powerful JavaScript Framework, AngularJS extends HTML attributes with Directives, and binds data to HTML."
+                            },
+                            { id: 7211010, created_date: "2014/10/15", title: "JavaScript"
+                             , body: "JavaScript is the programming language of HTML and the Web. Programming makes computers do what you want them to do."
+                            }
+                        ]
+                }
+            },
             addMemo: function(){
                 /*
                     We can make a POST service call from here to add the memo. For the time being, I'm adding it in the data array.
@@ -127,10 +136,10 @@
                 var ideas = this.state.ideas;
                 if (this.refs.addMemoTitle.value && this.refs.addMemoBody.value){
                     ideas.push(this.getIdAndCreatedDate());
-                    this.setState({ideas: ideas});
                     this.refs.addMemoTitle.value = this.refs.addMemoBody.value = '';
-                    this.setState({editingBody: false, leftChars: this.state.maxAllowedChars, showAlert: true});
+                    this.setState({ideas: ideas, editingBody: false, leftChars: this.state.maxAllowedChars, showAlert: true});
                     this.hideAlert(this);
+                    localStorage.setItem('ideas', JSON.stringify(ideas));
                 }
                 else{
                     alert('Please enter some values.')
@@ -163,6 +172,13 @@
                 var arr = this.state.ideas;
                 arr.splice(i, 1);
                 this.setState({ideas: arr});
+                if (localStorage.getItem('ideas')) {
+                    localStorage.setItem('ideas', JSON.stringify(this.state.ideas));
+                }
+                else{
+
+                }
+
             },
             updateMemo: function(newMemoTitle, newMemoBody, i){
                 /*
@@ -226,6 +242,7 @@
                         </label>
                     </div>
                          { this.state.ideas.map(this.renderMemo) }
+                    <div id="footer" className="footer">Author: Anand Dev Singh | ananddev.singh@globallogic.com | GlobalLogic - Noida, India.</div>
                     </div>
                 );
             },
