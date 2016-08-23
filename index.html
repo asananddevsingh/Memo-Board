@@ -128,7 +128,7 @@
                     ideas.push(this.getIdAndCreatedDate());
                     this.setState({ideas: ideas});
                     this.refs.addMemoTitle.value = this.refs.addMemoBody.value = '';
-                    this.setState({editingBody: false});
+                    this.setState({editingBody: false, leftChars: this.state.maxAllowedChars});
                 }
                 else{
                     alert('Please enter some values.')

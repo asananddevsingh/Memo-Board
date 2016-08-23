@@ -103,6 +103,7 @@ button {
 .tile {
     margin: 5px;
     text-align: left;
+    word-wrap: break-word;
 }
 
 .tile-title {
@@ -110,7 +111,7 @@ button {
     background-color: #fffb76;
 }
 
-..tile-body{
+.tile-body{
     min-height: 85px;
 }
 
