@@ -15,7 +15,7 @@ body {
     text-align: center;
     width: 150px;
     height: 150px;
-    background-color: #fff;
+    background-color: #fffdbc;
     margin: 10px;
     float: left;
     position: relative;
@@ -61,16 +61,28 @@ button {
 
 .button-primary {
     background-color: darkblue;
+    width: 75px;
+    height: 25px;
+    line-height: 12px;
+    margin-top: 6px;
 }
 
 .button-success {
     background-color: green;
+    width: 75px;
+    height: 25px;
+    line-height: 12px;
+    margin-top: 6px;
 }
 
 .button-danger {
     background-color: red;
 }
 
+.danger {
+    color: red;
+    font-weight: bold;
+}
 .idea-title {
     width: 400px;
     margin: 10px;
@@ -93,24 +105,23 @@ button {
     text-align: left;
 }
 
-.tile.tile-title {
+.tile-title {
     font-weight: bold;
+    background-color: #fffb76;
+}
+
+..tile-body{
+    min-height: 85px;
 }
 
 .deleteMemo {
-    background-image: url('/images/remove-icon.png');
+    background-image: url('../images/remove-icon.png');
     float: right;
     height: 15px;
     width: 15px;
     margin: 4px;
     background-repeat: no-repeat;
 }
-
-
-/*.tile-title:hover::after {
-    content: url('/images/remove-icon.png');
-    float: right;
-}*/
 
 .editTitle {
     width: 134px;
@@ -134,9 +145,9 @@ textarea:focus {
     -webkit-appearance: none;
 }
 
-
-/*.tile.tile-title:hover{
-    border: 1px solid #000;
-}*/
-
-.tile .tile-body {}
+.sort {
+    font-size: 14px;
+    margin: 10px;
+    font-weight: bold;
+    color: black;
+}

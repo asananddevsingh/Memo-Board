@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memo Board | React JS</title>
+    <script src="./libs/react.js"></script>
+    <script src="./libs/react-dom.js"></script>
+    <script src="./libs/browser.min.js"></script>
+    <link href="./css/style.min.css" rel="stylesheet" >
+</head>
+<body>
+    <div id="memoBoard"></div>
+
+    /*
+        Writing the script at the same page because might be possibel some machine will not supoort JSX files. However here I've referenced to 'browser.min.js' to support JSX.
+        We can move the components in the separate files.
+    */
+    <script type="text/babel">
+
+        var Memo = React.createClass({
+            getInitialState: function(){
+              return ({
+                  editing: false,
+                  deleting: false
+              })
+            },
+            render: function(){
+                if(this.state.editing){
+                    return this.renderForm();
+                }
+                else{
+                    return this.renderText();
+                }
+            },
+            renderText: function(){
+                return (
+                     <div className="memoContainer" ref="deleteMemo"  onMouseEnter={this.showBin} onMouseLeave={this.hideBin}>
+                        <span className={ this.state.deleting ? "deleteMemo" : "visuallyhidden"} onClick={this.remove}  ref="deleteMemo"></span>
+                         <div>{this.props.children}</div>
+                         <button onClick={this.edit} className="button-primary">Edit</button>
+                     </div>
+                );
+            },
+            showBin: function(){
+                this.setState({deleting : true });
+            },
+            hideBin: function(){
+              this.setState({deleting : false });
+            },
+            renderForm: function(){
+                return (
+                     <div className="memoContainer">
+                         <textarea defaultValue={this.props.title} ref="newIdeaTitle" className="editTitle" maxLength="10" title="Max 10 characters"  onBlur={this.handleBlur}>
+
+                         </textarea>
+                         <textarea defaultValue={this.props.body} ref="newIdeaBody" className="editBody" maxLength="140" title="Max 140 characters" onBlur={this.handleBlur}>
+
+                         </textarea>
+                         <button onClick={this.save} className="button-success">Save</button>
+                     </div>
+                );
+            },
+            handleBlur: function () {
+                /*
+                    We can make a service call from here to save the changes done on memo.
+                    For the time being, I'm populating an alert message.
+                */
+                if(!this.editing){
+                    alert('Trigger an update request to the backend REST service.');
+                    this.setState({editing: !this.state.editing});
+                    this.save();
+                }
+                else{
+                    this.setState({editing: !this.state.editing});
+                }
+            },
+            edit: function(){
+                this.setState({editing: true})
+            },
+            remove: function(){
+                /*
+                    We can make a service call from here to update the memo.
+                    For the time being, I'm populating an alert message.
+                */
+                this.props.removeMemo(this.props.index);
+                alert('Trigger a delete request to the backend REST service.');
+            },
+            save: function(){
+                this.props.updateMemo(this.refs.newIdeaTitle.value, this.refs.newIdeaBody.value, this.props.index);
+                this.setState({editing: false});
+            }
+        });
+
+        var Board = React.createClass({
+            /*
+                We can make a service call from here to fetch the memo. For the time being, I'm creating a data array.
+            */
+            getInitialState: function(){
+                return {
+                    ideas: [
+                        { id: 7210810, created_date: "2016/08/22", title: "React"
+                         , body: "React is a JavaScript library for creating user interfaces by Facebook and Instagram. Many people choose to think of React as the V in MVC.."
+                        },
+                        { id: 7210811, created_date: "2016/08/23", title: "Node JS"
+                         , body: "In software dev, Node.js is an open source, cross platform runtime environment for developing server-side applications."
+                        },
+                        { id: 7210900, created_date: "2015/04/14", title: "Angular"
+                         , body: "AngularJS is a very powerful JavaScript Framework, AngularJS extends HTML attributes with Directives, and binds data to HTML."
+                        },
+                        { id: 7211010, created_date: "2014/10/15", title: "JavaScript"
+                         , body: "JavaScript is the programming language of HTML and the Web. Programming makes computers do what you want them to do."
+                        }
+                    ],
+                    showMemoForm: false,
+                    editingBody: false,
+                    maxAllowedChars: 140,
+                    leftChars: 140,
+                    thresholdCharCount: 15,
+                    sortingValue : "select"
+                };
+            },
+            addMemo: function(){
+                /*
+                    We can make a POST service call from here to add the memo. For the time being, I'm adding it in the data array.
+                */
+                var ideas = this.state.ideas;
+                if (this.refs.addMemoTitle.value && this.refs.addMemoBody.value){
+                    ideas.push(this.getIdAndCreatedDate());
+                    this.setState({ideas: ideas});
+                    this.refs.addMemoTitle.value = this.refs.addMemoBody.value = '';
+                    this.setState({editingBody: false});
+                }
+                else{
+                    alert('Please enter some values.')
+                }
+            },
+            getIdAndCreatedDate: function(){
+                /*
+                    For the time being; I'm implementing a fixed logic to create the ID and Created Date as I don't have service APIs.
+                    However service call can be made from here to fetch the data.
+                */
+                var date = new Date();
+                var newId = date.getMonth() + "" + date.getDate() + "" + date.getMinutes() + "" + date.getSeconds();
+                var createdDate = date.getUTCFullYear() + "/" + date.getUTCMonth() + "/" + date.getUTCDate();
+                return {
+                        id: newId,
+                        created_date: createdDate,
+                        title: this.refs.addMemoTitle.value,
+                        body: this.refs.addMemoBody.value
+                }
+            },
+            removeMemo: function(i){
+                /*
+                    We can make a service call from here to remove the memo. For the time being, I'm removing it from the data array.
+                */
+                var arr = this.state.ideas;
+                arr.splice(i, 1);
+                this.setState({ideas: arr});
+            },
+            updateMemo: function(newMemoTitle, newMemoBody, i){
+                /*
+                    We can make a service call from here to update the memo. For the time being, I'm updating the data array.
+                */
+                var arr = this.state.ideas;
+                var memoItems = arr[i];
+                memoItems.title = newMemoTitle.trim();
+                memoItems.body = newMemoBody.trim();
+                arr[i] = memoItems;
+                this.setState({ideas: arr});
+            },
+            toggleMemoForm: function(){
+               this.setState({showMemoForm: !this.state.showMemoForm});
+            },
+            renderMemo: function(memo, i){
+                return (
+                    <Memo key={i} index={i} updateMemo={this.updateMemo}
+                       removeMemo={this.removeMemo} title={memo.title} body={memo.body} >
+                        <div className="tile tile-title" ref="deleteMemo" >
+                            {memo.title}
+                        </div>
+                        <div className="tile tile-body">
+                            {memo.body}
+                        </div>
+                    </Memo>
+                );
+            },
+            render: function(){
+                return (
+                    <div className="board">
+                    <div className="addMemo" onClick={this.toggleMemoForm}
+                       title={this.state.showMemoForm ? "Colapse the form" : "Add new Idea/Memo" }>
+                        {this.state.showMemoForm ? "-" : "+"}
+                    </div>
+                    <div className={this.state.showMemoForm ? "saveMemo" : "visuallyhidden"} >
+                        <div >
+                            <textarea placeholder="Title ... (Max 10 characters)" className="idea-title" ref="addMemoTitle" maxLength="10" ></textarea>
+                        </div>
+                        <div >
+                            <textarea  placeholder="Idea ... (Max 140 characters)" className="idea-body" ref="addMemoBody" maxLength="140" onChange={this.handleChange}></textarea>
+                        </div>
+                        <div className="btn-add-idea">
+                            <span className={this.state.leftChars < this.state.thresholdCharCount ? "danger" : "visuallyhidden"}>
+                                    <b>{this.state.leftChars} more character(s) allowed</b>
+                            </span>
+                            <button onClick={this.addMemo} className="button-success">Add</button>
+                        </div>
+                     </div>
+                     <div className="sort">
+                        Sort by: <select onChange={this.sorting} value={this.state.sortingValue}>
+                                      <option value="select">Select</option>
+                                      <option value="title">Title</option>
+                                      <option value="createdate">Created date</option>
+                                   </select>
+                    </div>
+                         { this.state.ideas.map(this.renderMemo) }
+                    </div>
+                );
+            },
+            sorting: function(event){
+                if(event){
+                     this.setState({sortingValue: event.target.value});
+                     var dataArray = this.state.ideas;
+                     switch(event.target.value) {
+                        case 'title':
+                            this.setState({ ideas: dataArray.sort(this.compareTitle)});
+                            break;
+                        case 'createdate':
+                            this.setState({ ideas: dataArray.sort(this.compareCreatedDate)});
+                            break;
+                        default:
+                            this.setState({ ideas: dataArray.sort(this.compareCreatedId).reverse()});
+                            break;
+                    }
+                }
+            },
+            compareTitle: function (a,b) {
+              if (a.title.toLowerCase() < b.title.toLowerCase())
+                return -1;
+              if (a.title.toLowerCase() > b.title.toLowerCase())
+                return 1;
+              return 0;
+            },
+            compareCreatedDate: function (a,b) {
+              if (a.created_date < b.created_date)
+                return -1;
+              if (a.created_date > b.created_date)
+                return 1;
+              return 0;
+            },
+            compareCreatedId: function (a,b) {
+              if (a.id < b.id)
+                return -1;
+              if (a.id > b.id)
+                return 1;
+              return 0;
+            },
+            handleChange: function(event) {
+                this.setState({editingBody: true});
+                this.setState({leftChars: this.state.maxAllowedChars - this.refs.addMemoBody.value.length});
+            },
+            componentDidUpdate: function () {
+                if(!this.state.editingBody){
+                    ReactDOM.findDOMNode(this.refs.addMemoTitle).focus();
+                }
+            }
+        });
+
+        ReactDOM.render( <Board/>, document.getElementById('memoBoard'));</script>
+</body>
+</html>
+
+/*
+    Author  : Anand Dev Singh | ananddev.singh@globallogic.com.
+    Date    : 23/Aug/2016
+    Company : GlobalLogic Noida - India.
+*/
